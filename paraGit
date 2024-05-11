@@ -1,0 +1,100 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+// primera fase del programa
+class Tarea {
+    private String descripcion;
+    private String estado;
+
+    public Tarea(String descripcion, String estado) {
+        this.descripcion = descripcion;
+        this.estado = estado;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+}
+
+class AdministradorTareas {
+    private ArrayList<Tarea> tareas;
+
+    public AdministradorTareas() {
+        tareas = new ArrayList<>();
+    }
+
+    public void agregarTarea(String descripcion) {
+        Tarea tarea = new Tarea(descripcion, "Por hacer");
+        tareas.add(tarea);
+        System.out.println("Tarea añadida: " + descripcion);
+    }
+
+    public void listarTareas() {
+        if (tareas.isEmpty()) {
+            System.out.println("No hay tareas.");
+        } else {
+            System.out.println("Lista de tareas:");
+            for (int i = 0; i < tareas.size(); i++) {
+                Tarea tarea = tareas.get(i);
+                System.out.println((i + 1) + ". " + tarea.getDescripcion() + " - " + tarea.getEstado());
+            }
+        }
+    }
+
+    public void eliminarTarea(int indice) {
+        if (indice >= 1 && indice <= tareas.size()) {
+            Tarea tareaEliminada = tareas.remove(indice - 1);
+            System.out.println("Tarea eliminada: " + tareaEliminada.getDescripcion());
+        } else {
+            System.out.println("Índice de tarea no válido.");
+        }
+    }
+}
+
+public class Principal {
+    public static void main(String[] args) {
+        AdministradorTareas administradorTareas = new AdministradorTareas();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nOpciones:");
+            System.out.println("1. Agregar tarea");
+            System.out.println("2. Listar tareas");
+            System.out.println("3. Eliminar tarea");
+            System.out.println("4. Salir");
+
+            System.out.print("Selecciona una opción: ");
+            int opcion = scanner.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    System.out.print("Introduce la descripción de la tarea: ");
+                    scanner.nextLine(); // Consumir el salto de línea
+                    String descripcion = scanner.nextLine();
+                    administradorTareas.agregarTarea(descripcion);
+                    break;
+                case 2:
+                    administradorTareas.listarTareas();
+                    break;
+                case 3:
+                    System.out.print("Introduce el índice de la tarea a eliminar: ");
+                    int indice = scanner.nextInt();
+                    administradorTareas.eliminarTarea(indice);
+                    break;
+                case 4:
+                    System.out.println("¡Hasta luego!");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Opción no válida. Por favor, selecciona una opción válida.");
+            }
+        }
+    }
+}
