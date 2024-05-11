@@ -1,0 +1,142 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+//esta vez si es la version final
+class Tarea {
+    
+    private String descripcion;
+    private String estado;
+    private String asignadoA;
+
+    public Tarea(String descripcion, String estado, String asignadoA) {
+        this.descripcion = descripcion;
+        this.estado = estado;
+        this.asignadoA = asignadoA;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getAsignadoA() {
+        return asignadoA;
+    }
+}
+
+class AdministradorTareas {
+    private HashMap<String, ArrayList<Tarea>> tareasPorPersona;
+    private ArrayList<String> personasRegistradas;
+
+    public AdministradorTareas() {
+        tareasPorPersona = new HashMap<>();
+        personasRegistradas = new ArrayList<>();
+    }
+
+    public void registrarPersona(String nombre) {
+        personasRegistradas.add(nombre);
+        System.out.println("Persona registrada: " + nombre);
+    }
+
+    public void agregarTarea(String descripcion, String asignadoA) {
+        if (!personasRegistradas.contains(asignadoA)) {
+            System.out.println("La persona no está registrada.");
+            return;
+        }
+
+        Tarea tarea = new Tarea(descripcion, "Por hacer", asignadoA);
+        if (!tareasPorPersona.containsKey(asignadoA)) {
+            tareasPorPersona.put(asignadoA, new ArrayList<>());
+        }
+        tareasPorPersona.get(asignadoA).add(tarea);
+        System.out.println("Tarea añadida para " + asignadoA + ": " + descripcion);
+    }
+
+    public void listarTareasPorPersona(String persona) {
+        if (tareasPorPersona.containsKey(persona)) {
+            ArrayList<Tarea> tareas = tareasPorPersona.get(persona);
+            System.out.println("Tareas asignadas a " + persona + ":");
+            for (int i = 0; i < tareas.size(); i++) {
+                Tarea tarea = tareas.get(i);
+                System.out.println((i + 1) + ". " + tarea.getDescripcion() + " - " + tarea.getEstado());
+            }
+        } else {
+            System.out.println("No hay tareas asignadas a " + persona + ".");
+        }
+    }
+
+    public void cumplirTarea(String persona, int indice) {
+        if (tareasPorPersona.containsKey(persona)) {
+            ArrayList<Tarea> tareas = tareasPorPersona.get(persona);
+            if (indice >= 1 && indice <= tareas.size()) {
+                Tarea tarea = tareas.get(indice - 1);
+                tarea.setEstado("Cumplida");
+                System.out.println("¡Bien hecho! Tarea cumplida por " + persona + ": " + tarea.getDescripcion());
+            } else {
+                System.out.println("Índice de tarea no válido para " + persona + ".");
+            }
+        } else {
+            System.out.println("No hay tareas asignadas a " + persona + ".");
+        }
+    }
+}
+
+public class Principal {
+    public static void main(String[] args) {
+        AdministradorTareas administradorTareas = new AdministradorTareas();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nOpciones:");
+            System.out.println("1. Registrar persona");
+            System.out.println("2. Agregar tarea para una persona");
+            System.out.println("3. Listar tareas de una persona");
+            System.out.println("4. Cumplir tarea de una persona");
+            System.out.println("5. Salir");
+
+            System.out.print("Selecciona una opción: ");
+            int opcion = scanner.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    System.out.print("Introduce el nombre de la persona: ");
+                    String nombrePersona = scanner.next();
+                    administradorTareas.registrarPersona(nombrePersona);
+                    break;
+                case 2:
+                    System.out.print("Introduce la descripción de la tarea: ");
+                    scanner.nextLine(); // Consumir el salto de línea
+                    String descripcion = scanner.nextLine();
+                    System.out.print("Introduce el nombre de la persona asignada: ");
+                    String asignadoA = scanner.next();
+                    administradorTareas.agregarTarea(descripcion, asignadoA);
+                    break;
+                case 3:
+                    System.out.print("Introduce el nombre de la persona: ");
+                    String personaListar = scanner.next();
+                    administradorTareas.listarTareasPorPersona(personaListar);
+                    break;
+                case 4:
+                    System.out.print("Introduce el nombre de la persona: ");
+                    String personaCumplir = scanner.next();
+                    System.out.print("Introduce el índice de la tarea a cumplir: ");
+                    int indiceCumplir = scanner.nextInt();
+                    administradorTareas.cumplirTarea(personaCumplir, indiceCumplir);
+                    break;
+                case 5:
+                    System.out.println("¡Hasta luego!");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Opción no válida. Por favor, selecciona una opción válida.");
+            }
+        }
+    }
+}
