@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-// primera fase del programa
+//algunas ediciones de codigo
 class Tarea {
     private String descripcion;
     private String estado;
@@ -56,6 +56,16 @@ class AdministradorTareas {
             System.out.println("Índice de tarea no válido.");
         }
     }
+
+    public void cumplirTarea(int indice) {
+        if (indice >= 1 && indice <= tareas.size()) {
+            Tarea tarea = tareas.get(indice - 1);
+            tarea.setEstado("Cumplida");
+            System.out.println("¡Bien hecho! Tarea cumplida: " + tarea.getDescripcion());
+        } else {
+            System.out.println("Índice de tarea no válido.");
+        }
+    }
 }
 
 public class Principal {
@@ -67,8 +77,9 @@ public class Principal {
             System.out.println("\nOpciones:");
             System.out.println("1. Agregar tarea");
             System.out.println("2. Listar tareas");
-            System.out.println("3. Eliminar tarea");
-            System.out.println("4. Salir");
+            System.out.println("3. Cumplir tarea");
+            System.out.println("4. Eliminar tarea");
+            System.out.println("5. Salir");
 
             System.out.print("Selecciona una opción: ");
             int opcion = scanner.nextInt();
@@ -84,11 +95,16 @@ public class Principal {
                     administradorTareas.listarTareas();
                     break;
                 case 3:
-                    System.out.print("Introduce el índice de la tarea a eliminar: ");
-                    int indice = scanner.nextInt();
-                    administradorTareas.eliminarTarea(indice);
+                    System.out.print("Introduce el índice de la tarea a cumplir: ");
+                    int indiceCumplir = scanner.nextInt();
+                    administradorTareas.cumplirTarea(indiceCumplir);
                     break;
                 case 4:
+                    System.out.print("Introduce el índice de la tarea a eliminar: ");
+                    int indiceEliminar = scanner.nextInt();
+                    administradorTareas.eliminarTarea(indiceEliminar);
+                    break;
+                case 5:
                     System.out.println("¡Hasta luego!");
                     scanner.close();
                     System.exit(0);
